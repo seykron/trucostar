@@ -74,7 +74,7 @@ public class Mano {
     return manoJugadores;
   }
 
-  public List<Puntaje> getPuntajes() {
+  public List<Puntaje> puntajes() {
     List<Puntaje> puntajes = new ArrayList<Puntaje>();
 
     for (ManoJugador manoJugador : manoJugadores) {

@@ -32,4 +32,20 @@ public class Puntaje {
     this.usuario = usuario;
     this.puntos = puntos;
   }
+
+  public long id() {
+    return id;
+  }
+
+  public Mano mano() {
+    return mano;
+  }
+
+  public int puntos() {
+    return puntos;
+  }
+
+  public Usuario usuario() {
+    return usuario;
+  }
 }

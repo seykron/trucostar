@@ -15,6 +15,12 @@ public class Usuario {
   private Long id;
 
   @Column(name = "nombre")
-  private Long nombre;
+  private String nombre;
 
+  Usuario() {
+  }
+
+  public Usuario(String nombre) {
+    this.nombre = nombre;
+  }
 }
