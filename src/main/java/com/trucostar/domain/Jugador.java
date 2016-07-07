@@ -18,17 +18,26 @@ public class Jugador {
   @ManyToOne
   private Usuario usuario;
 
-  @Column(name = "puntos")
-  private int puntos;
+  @Column(name = "equipo")
+  private String equipo;
 
   Jugador() {
   }
 
-  public Jugador(Usuario usuario) {
+  public Jugador(Usuario usuario, String equipo) {
     this.usuario = usuario;
+    this.equipo = equipo;
   }
 
   public long getId() {
     return id;
+  }
+
+  public String getEquipo() {
+    return equipo;
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
   }
 }

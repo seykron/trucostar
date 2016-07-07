@@ -45,7 +45,7 @@ public class Juego {
   }
 
   Juego(List<Carta> cartas) {
-
+    this.cartas = cartas;
   }
 
   public Mano repartir() {

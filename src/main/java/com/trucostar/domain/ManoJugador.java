@@ -67,11 +67,19 @@ public class ManoJugador {
     return cartasJugadas;
   }
 
-  public boolean isTruco() {
+  public boolean cantoTruco() {
     return truco;
   }
 
   public boolean isEnvido() {
     return envido;
+  }
+
+  public int getPuntos() {
+    return puntos;
+  }
+
+  public void darPuntos(int puntos) {
+    this.puntos += puntos;
   }
 }
