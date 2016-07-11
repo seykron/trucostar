@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
@@ -28,16 +25,12 @@ public class Mano {
   @GeneratedValue
   private long id;
 
-  @ElementCollection
+  @OneToMany
   @JoinColumn(name = "mano_jugador_id")
   private List<ManoJugador> manoJugadores;
 
-  @ElementCollection
+  @OneToMany
   @JoinColumn(name = "baza_id")
-  @AttributeOverrides({
-    @AttributeOverride(name = "mano_jugador_id",
-        column = @Column(name = "baza_mano_jugador_id"))
-  })
   private List<Baza> bazas = new ArrayList<Baza>();
 
   Mano() {

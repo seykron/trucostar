@@ -2,23 +2,25 @@ package com.trucostar.test;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
-import com.trucostar.domain.Member;
-import com.trucostar.repo.MemberDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.trucostar.domain.Member;
+import com.trucostar.repo.MemberDao;
+
+import junit.framework.Assert;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:test-context.xml",
-"classpath:/META-INF/spring/applicationContext.xml"})
+@ContextConfiguration(locations = {
+    "classpath:META-INF/test-infrastructure.xml",
+    "classpath:/META-INF/spring/applicationContext.xml"})
 @Transactional
-@TransactionConfiguration(defaultRollback=true)
+@Rollback
 public class MemberDaoTest
 {
     @Autowired

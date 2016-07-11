@@ -8,8 +8,11 @@ import static com.trucostar.domain.Carta.Palo.ORO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.trucostar.domain.Carta.Palo;
 
+@Component
 public class JuegoFactory {
 
   public Juego crearJuego() {

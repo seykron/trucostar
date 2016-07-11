@@ -71,7 +71,7 @@ public class ManoTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void tirar_errorYaTiro() {
-    Mano mano = new Mano(Arrays.asList(jugador1, jugador2, jugador3, jugador4));
+    Mano mano = new Mano(Arrays.asList(jugador1, jugador2));
 
     mano.tirar(jugador1.getJugador(), 1);
     mano.tirar(jugador1.getJugador(), 0);

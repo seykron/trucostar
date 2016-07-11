@@ -3,17 +3,25 @@ package com.trucostar.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.Validate;
 
-@Embeddable
+@Entity
+@Table(name = "bazas")
 public class Baza {
 
-  @ElementCollection
+  @Id
+  @GeneratedValue
+  private long id;
+
+  @OneToMany
   @JoinColumn(name = "mano_jugador_id")
   private List<ManoJugador> manoJugadores = new ArrayList<ManoJugador>();
 
