@@ -123,10 +123,10 @@ public class ManoTest {
     assertTrue(mano.acciones(jugador2.getJugador()).isRetruco() == true);
     assertTrue(mano.acciones(jugador2.getJugador()).isQuiero() == true);
     assertTrue(mano.acciones(jugador2.getJugador()).isNoQuiero() == true);
- }
+  }
 
   private ManoJugador crearJugador(String nombre, String equipo, Carta... cartas) {
-    Usuario usuario = new Usuario(nombre);
+    Usuario usuario = new Usuario(nombre, "pepe", "pwd");
     Jugador jugador = new Jugador(usuario, equipo);
     long randomId = Math.round(System.currentTimeMillis() * Math.random());
 

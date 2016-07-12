@@ -8,6 +8,6 @@ public final class RequestContext {
   }
 
   public static Usuario usuarioActual() {
-    return new Usuario("jsmith");
+    return new Usuario("jsmith", "jsmith", "pwd");
   }
 }

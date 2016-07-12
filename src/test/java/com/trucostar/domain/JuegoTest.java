@@ -43,6 +43,6 @@ public class JuegoTest {
   }
 
   private Jugador crearJugador(String equipo) {
-    return new Jugador(new Usuario("pepe"), equipo);
+    return new Jugador(new Usuario("pepe", "pepe", "pwd"), equipo);
   }
 }

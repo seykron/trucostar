@@ -58,7 +58,7 @@ public class JugadorDto {
       cartasJugadas.add(cartaJugada.nombre());
     }
     for (Carta carta : manoJugador.getCartas()) {
-      if (jugador.usuario().getId() == usuarioActual.getId() &&
+      if (jugador.usuario().id() == usuarioActual.id() &&
           !cartasJugadas.contains(carta.nombre())) {
         cartasMano.add(carta.nombre());
       }
