@@ -35,19 +35,23 @@ public class Carta {
     this.peso = peso;
   }
 
-  public Palo getPalo() {
+  public Palo palo() {
     return palo;
   }
 
-  public int getNumero() {
+  public int numero() {
     return numero;
   }
 
-  public boolean mata(Carta otraCarta) {
-    return otraCarta == null || peso > otraCarta.getPeso();
+  public String nombre() {
+    return  palo().name().toLowerCase() + "-" + String.valueOf(numero());
   }
 
-  int getPeso() {
+  public boolean mata(Carta otraCarta) {
+    return otraCarta == null || peso > otraCarta.peso();
+  }
+
+  int peso() {
     return peso;
   }
 

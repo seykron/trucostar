@@ -56,10 +56,12 @@ public class ManoJugador {
   }
 
   public void truco() {
+    Validate.isTrue(!truco, "El jugador ya cantó truco");
     truco = true;
   }
 
   public void envido() {
+    Validate.isTrue(!envido, "El jugador ya cantó envido");
     envido = true;
   }
 
@@ -79,7 +81,7 @@ public class ManoJugador {
     return truco;
   }
 
-  public boolean isEnvido() {
+  public boolean cantoEnvido() {
     return envido;
   }
 

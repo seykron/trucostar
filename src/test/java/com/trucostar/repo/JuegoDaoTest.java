@@ -1,5 +1,7 @@
 package com.trucostar.repo;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,20 @@ public class JuegoDaoTest {
   private JuegoFactory juegoFactory;
 
   @Test
-  public void save() {
+  public void guardar() {
     Juego juego = juegoFactory.crearJuego();
 
-    juegoDao.save(juego);
+    juegoDao.guardar(juego);
+  }
+
+  @Test
+  public void buscarPorGrupo() {
+    Juego juego1 = juegoFactory.crearJuego("juego1");
+    Juego juego2 = juegoFactory.crearJuego("juego2");
+    juegoDao.guardar(juego1);
+    juegoDao.guardar(juego2);
+    assertTrue(juego1.equals(juegoDao.buscarPorGrupo("juego1")));
+    assertTrue(juego2.equals(juegoDao.buscarPorGrupo("juego2")));
+    assertTrue(juegoDao.buscarPorGrupo("juego3") == null);
   }
 }

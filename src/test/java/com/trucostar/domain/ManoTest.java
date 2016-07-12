@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -63,10 +64,10 @@ public class ManoTest {
     mano.tirar(jugador4.getJugador(), 2);
     assertTrue("La mano termino", mano.terminada() == true);
 
-    validatePuntaje(mano.puntajes().get(0), mano, jugador1.getJugador().getUsuario(), 1);
-    validatePuntaje(mano.puntajes().get(1), mano, jugador2.getJugador().getUsuario(), 0);
-    validatePuntaje(mano.puntajes().get(2), mano, jugador3.getJugador().getUsuario(), 1);
-    validatePuntaje(mano.puntajes().get(3), mano, jugador4.getJugador().getUsuario(), 0);
+    validatePuntaje(mano.puntajes().get(0), mano, jugador1.getJugador().usuario(), 1);
+    validatePuntaje(mano.puntajes().get(1), mano, jugador2.getJugador().usuario(), 0);
+    validatePuntaje(mano.puntajes().get(2), mano, jugador3.getJugador().usuario(), 1);
+    validatePuntaje(mano.puntajes().get(3), mano, jugador4.getJugador().usuario(), 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -76,6 +77,25 @@ public class ManoTest {
     mano.tirar(jugador1.getJugador(), 1);
     mano.tirar(jugador1.getJugador(), 0);
   }
+
+  @Test
+  @Ignore
+  public void acciones_envido() {
+    Mano mano = new Mano(Arrays.asList(jugador1, jugador2, jugador3, jugador4));
+    assertTrue(mano.acciones(jugador1.getJugador()).isEnvido() == true);
+    assertTrue(mano.acciones(jugador2.getJugador()).isEnvido() == true);
+    assertTrue(mano.acciones(jugador3.getJugador()).isEnvido() == true);
+    assertTrue(mano.acciones(jugador4.getJugador()).isEnvido() == true);
+
+    mano.envido(jugador1.getJugador());
+    assertTrue(mano.acciones(jugador1.getJugador()).isEnvido() == false);
+    assertTrue(mano.acciones(jugador1.getJugador()).isQuiero() == false);
+    assertTrue(mano.acciones(jugador1.getJugador()).isNoQuiero() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isEnvido() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isQuiero() == true);
+    assertTrue(mano.acciones(jugador2.getJugador()).isNoQuiero() == true);
+ }
+
 
   private ManoJugador crearJugador(String nombre, String equipo, Carta... cartas) {
     Usuario usuario = new Usuario(nombre);

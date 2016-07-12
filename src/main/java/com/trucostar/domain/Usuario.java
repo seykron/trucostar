@@ -23,4 +23,12 @@ public class Usuario {
   public Usuario(String nombre) {
     this.nombre = nombre;
   }
+
+  public Long getId() {
+    return id;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
 }

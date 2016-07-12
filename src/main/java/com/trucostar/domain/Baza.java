@@ -77,7 +77,7 @@ public class Baza {
 
   private boolean yaTiro(ManoJugador manoJugadorRequerido) {
     for (ManoJugador manoJugador : manoJugadores) {
-      if (manoJugador.getJugador().getId() == manoJugadorRequerido.getJugador().getId()) {
+      if (manoJugador.getJugador().id() == manoJugadorRequerido.getJugador().id()) {
         return true;
       }
     }

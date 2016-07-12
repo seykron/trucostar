@@ -29,15 +29,15 @@ public class Jugador {
     this.equipo = equipo;
   }
 
-  public long getId() {
+  public long id() {
     return id;
   }
 
-  public String getEquipo() {
+  public String equipo() {
     return equipo;
   }
 
-  public Usuario getUsuario() {
+  public Usuario usuario() {
     return usuario;
   }
 }

@@ -8,6 +8,7 @@ import static com.trucostar.domain.Carta.Palo.ORO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Component;
 
 import com.trucostar.domain.Carta.Palo;
@@ -17,6 +18,11 @@ public class JuegoFactory {
 
   public Juego crearJuego() {
     return new Juego(crearMazo());
+  }
+
+  public Juego crearJuego(String grupo) {
+    Validate.notEmpty(grupo, "El grupo no puede ser null");
+    return new Juego(crearMazo(), grupo);
   }
 
   private List<Carta> crearMazo() {
