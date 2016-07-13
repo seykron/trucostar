@@ -3,9 +3,12 @@ package com.trucostar.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -33,14 +36,14 @@ public class ManoJugador {
   @JoinColumn(name = "carta_jugada_id")
   private List<Carta> cartasJugadas = new ArrayList<Carta>();
 
-  @Column(name = "is_envido")
-  private boolean envido;
-
-  @Column(name = "is_truco")
-  private boolean truco;
-
   @Column(name = "puntos")
   private int puntos;
+
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
+  @CollectionTable(name = "mano_jugador_cantos")
+  @Column(name = "canto")
+  private List<Cantos> cantos = new ArrayList<Cantos>();
 
   ManoJugador() {
   }
@@ -55,14 +58,18 @@ public class ManoJugador {
     cartasJugadas.add(carta);
   }
 
-  public void truco() {
-    Validate.isTrue(!truco, "El jugador ya cantó truco");
-    truco = true;
+  public void cantar(Cantos canto) {
+    Validate.isTrue(!cantos.contains(canto), "El jugador ya cantó " + canto.nombre());
+    cantos.add(canto);
   }
 
-  public void envido() {
-    Validate.isTrue(!envido, "El jugador ya cantó envido");
-    envido = true;
+  public boolean canto(Cantos... cantosParaRevisar) {
+    for (Cantos canto : cantosParaRevisar) {
+      if (cantos.contains(canto)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public Jugador getJugador() {
@@ -77,19 +84,15 @@ public class ManoJugador {
     return cartasJugadas;
   }
 
-  public boolean cantoTruco() {
-    return truco;
-  }
-
-  public boolean cantoEnvido() {
-    return envido;
-  }
-
   public int getPuntos() {
     return puntos;
   }
 
   public void darPuntos(int puntos) {
     this.puntos += puntos;
+  }
+
+  public boolean ganador(ManoJugador oponente, Cantos canto) {
+    return canto.ganador(this, oponente);
   }
 }

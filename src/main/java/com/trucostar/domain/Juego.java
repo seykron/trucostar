@@ -96,6 +96,15 @@ public class Juego {
     }
   }
 
+  public Jugador buscarJugador(Usuario usuario) {
+    for (Jugador jugador : jugadores) {
+      if (usuario.getId().equals(jugador.id())) {
+        return jugador;
+      }
+    }
+    return null;
+  }
+
   public long id() {
     return id;
   }

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -44,24 +43,24 @@ public class ManoTest {
     Mano mano = new Mano(Arrays.asList(jugador1, jugador2, jugador3, jugador4));
 
     // Primera baza: jugador4 gana
-    mano.tirar(jugador1.getJugador(), 1);
-    mano.tirar(jugador2.getJugador(), 2);
-    mano.tirar(jugador3.getJugador(), 2);
-    mano.tirar(jugador4.getJugador(), 0);
+    mano.tirar(jugador1.getJugador(), "oro-1");
+    mano.tirar(jugador2.getJugador(), "espada-12");
+    mano.tirar(jugador3.getJugador(), "oro-11");
+    mano.tirar(jugador4.getJugador(), "espada-7");
     assertTrue("La mano no termino", mano.terminada() == false);
 
     // Segunda baza: jugador3 gana
-    mano.tirar(jugador1.getJugador(), 2);
-    mano.tirar(jugador2.getJugador(), 0);
-    mano.tirar(jugador3.getJugador(), 0);
-    mano.tirar(jugador4.getJugador(), 1);
+    mano.tirar(jugador1.getJugador(), "espada-4");
+    mano.tirar(jugador2.getJugador(), "oro-7");
+    mano.tirar(jugador3.getJugador(), "basto-1");
+    mano.tirar(jugador4.getJugador(), "copa-5");
     assertTrue("La mano no termino", mano.terminada() == false);
 
     // Tercera baza: jugador1 gana
-    mano.tirar(jugador1.getJugador(), 0);
-    mano.tirar(jugador2.getJugador(), 1);
-    mano.tirar(jugador3.getJugador(), 1);
-    mano.tirar(jugador4.getJugador(), 2);
+    mano.tirar(jugador1.getJugador(), "espada-1");
+    mano.tirar(jugador2.getJugador(), "copa-1");
+    mano.tirar(jugador3.getJugador(), "copa-7");
+    mano.tirar(jugador4.getJugador(), "oro-10");
     assertTrue("La mano termino", mano.terminada() == true);
 
     validatePuntaje(mano.puntajes().get(0), mano, jugador1.getJugador().usuario(), 1);
@@ -74,12 +73,11 @@ public class ManoTest {
   public void tirar_errorYaTiro() {
     Mano mano = new Mano(Arrays.asList(jugador1, jugador2));
 
-    mano.tirar(jugador1.getJugador(), 1);
-    mano.tirar(jugador1.getJugador(), 0);
+    mano.tirar(jugador1.getJugador(), "oro-1");
+    mano.tirar(jugador1.getJugador(), "espada-1");
   }
 
   @Test
-  @Ignore
   public void acciones_envido() {
     Mano mano = new Mano(Arrays.asList(jugador1, jugador2, jugador3, jugador4));
     assertTrue(mano.acciones(jugador1.getJugador()).isEnvido() == true);
@@ -87,15 +85,45 @@ public class ManoTest {
     assertTrue(mano.acciones(jugador3.getJugador()).isEnvido() == true);
     assertTrue(mano.acciones(jugador4.getJugador()).isEnvido() == true);
 
-    mano.envido(jugador1.getJugador());
+    mano.cantar(jugador1.getJugador(), Cantos.ENVIDO);
     assertTrue(mano.acciones(jugador1.getJugador()).isEnvido() == false);
     assertTrue(mano.acciones(jugador1.getJugador()).isQuiero() == false);
     assertTrue(mano.acciones(jugador1.getJugador()).isNoQuiero() == false);
     assertTrue(mano.acciones(jugador2.getJugador()).isEnvido() == false);
     assertTrue(mano.acciones(jugador2.getJugador()).isQuiero() == true);
     assertTrue(mano.acciones(jugador2.getJugador()).isNoQuiero() == true);
+
+    mano.noQuiero();
+    assertTrue(mano.acciones(jugador2.getJugador()).isQuiero() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isNoQuiero() == false);
  }
 
+  @Test
+  public void acciones_truco() {
+    Mano mano = new Mano(Arrays.asList(jugador1, jugador2, jugador3, jugador4));
+
+    mano.cantar(jugador1.getJugador(), Cantos.ENVIDO);
+    mano.noQuiero();
+    assertTrue(mano.acciones(jugador1.getJugador()).isEnvido() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isEnvido() == false);
+    assertTrue(mano.acciones(jugador3.getJugador()).isEnvido() == false);
+    assertTrue(mano.acciones(jugador4.getJugador()).isEnvido() == false);
+
+    assertTrue(mano.acciones(jugador1.getJugador()).isTruco() == true);
+    assertTrue(mano.acciones(jugador2.getJugador()).isTruco() == true);
+    assertTrue(mano.acciones(jugador3.getJugador()).isTruco() == true);
+    assertTrue(mano.acciones(jugador4.getJugador()).isTruco() == true);
+
+    mano.cantar(jugador1.getJugador(), Cantos.TRUCO);
+    assertTrue(mano.acciones(jugador1.getJugador()).isTruco() == false);
+    assertTrue(mano.acciones(jugador1.getJugador()).isRetruco() == false);
+    assertTrue(mano.acciones(jugador1.getJugador()).isQuiero() == false);
+    assertTrue(mano.acciones(jugador1.getJugador()).isNoQuiero() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isTruco() == false);
+    assertTrue(mano.acciones(jugador2.getJugador()).isRetruco() == true);
+    assertTrue(mano.acciones(jugador2.getJugador()).isQuiero() == true);
+    assertTrue(mano.acciones(jugador2.getJugador()).isNoQuiero() == true);
+ }
 
   private ManoJugador crearJugador(String nombre, String equipo, Carta... cartas) {
     Usuario usuario = new Usuario(nombre);

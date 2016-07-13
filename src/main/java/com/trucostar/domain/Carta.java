@@ -44,7 +44,7 @@ public class Carta {
   }
 
   public String nombre() {
-    return  palo().name().toLowerCase() + "-" + String.valueOf(numero());
+    return palo().name().toLowerCase() + "-" + String.valueOf(numero());
   }
 
   public boolean mata(Carta otraCarta) {

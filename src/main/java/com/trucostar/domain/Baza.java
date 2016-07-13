@@ -35,16 +35,6 @@ public class Baza {
       this.numeroJugadores = numeroJugadores;
   }
 
-  public void tirar(ManoJugador manoJugador, int cartaIndex) {
-    Validate.isTrue(cartaIndex <= manoJugador.getCartas().size(),
-        "La carta especificada no existe");
-    Validate.isTrue(!yaTiro(manoJugador), "El jugador ya tiró en esta baza");
-
-    Carta carta = manoJugador.getCartas().get(cartaIndex);
-    manoJugador.tirar(carta);
-    manoJugadores.add(manoJugador);
-  }
-
   public ManoJugador ganador() {
     Validate.isTrue(terminada(), "La baza no está terminada");
 
@@ -73,6 +63,24 @@ public class Baza {
 
   public boolean terminada() {
       return numeroJugadores == manoJugadores.size();
+  }
+
+  void tirar(ManoJugador manoJugador, String nombreCarta) {
+    Validate.notEmpty(nombreCarta, "La carta no puede ser null");
+    Validate.isTrue(!yaTiro(manoJugador), "El jugador ya tiró en esta baza");
+
+    Carta carta = buscarCarta(manoJugador, nombreCarta);
+    manoJugador.tirar(carta);
+    manoJugadores.add(manoJugador);
+  }
+
+  private Carta buscarCarta(ManoJugador manoJugador, String nombreCarta) {
+    for (Carta carta : manoJugador.getCartas()) {
+      if (carta.nombre().equals(nombreCarta)) {
+        return carta;
+      }
+    }
+    throw new IllegalStateException("La carta no existe");
   }
 
   private boolean yaTiro(ManoJugador manoJugadorRequerido) {

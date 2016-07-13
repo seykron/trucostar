@@ -30,6 +30,10 @@ public class JuegoDao {
         .setParameter("grupo", grupo));
   }
 
+  public Juego buscarPorId(Long id) {
+    return em.find(Juego.class, id);
+  }
+
   private Object uniqueResult(Query query) {
     try {
       return query.getSingleResult();

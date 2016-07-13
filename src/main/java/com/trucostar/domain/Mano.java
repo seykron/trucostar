@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,7 +22,6 @@ public class Mano {
 
   private static final int TOTAL_BAZAS = 3;
   private static final int PUNTAJE_BASE = 1;
-  private static final int PUNTAJE_TRUCO = 2;
 
   @Id
   @GeneratedValue
@@ -33,6 +35,10 @@ public class Mano {
   @JoinColumn(name = "baza_id")
   private List<Baza> bazas = new ArrayList<Baza>();
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "ultimo_canto")
+  private Cantos ultimoCanto;
+
   Mano() {
   }
 
@@ -41,16 +47,16 @@ public class Mano {
     proximaBaza();
   }
 
-  public void tirar(Jugador jugador, int cartaIndex) {
+  public void tirar(Jugador jugador, String nombreCarta) {
     Validate.isTrue(!terminada(), "La mano ya terminó");
 
     ManoJugador manoJugador = buscarManoJugador(jugador);
     Baza baza = bazaActual();
 
-    baza.tirar(manoJugador, cartaIndex);
+    baza.tirar(manoJugador, nombreCarta);
 
     if (terminada()) {
-      // Terminó la partida, calcula el puntaje..
+      // Terminó la partida, calcula el puntaje.
       calcularPuntaje();
     } else if (baza.terminada()) {
       // Si terminó la baza crea una nueva.
@@ -78,50 +84,63 @@ public class Mano {
     return puntajes;
   }
 
-  public void envido(Jugador jugador) {
-    Validate.isTrue(!hayTruco(), "Ya se cantó truco");
-    Validate.isTrue(!hayEnvido(), "Ya se cantó envido");
-    ManoJugador manoJugador = buscarManoJugador(jugador);
-    manoJugador.envido();
-  }
-
-  public void truco(Jugador jugador) {
-    Validate.isTrue(!hayTruco(), "Ya se cantó truco");
-    ManoJugador manoJugador = buscarManoJugador(jugador);
-    manoJugador.truco();
-  }
-
   public Acciones acciones(Jugador jugador) {
     ManoJugador manoJugadorActual = buscarManoJugador(jugador);
     Acciones acciones = new Acciones();
 
-    for (ManoJugador manoJugador : manoJugadores) {
-      if (manoJugador.cantoEnvido()) {
-        acciones.marcarEnvido(false);
-      }
+    acciones.marcarEnvido(!canto(Cantos.ENVIDO));
+    acciones.marcarRealEnvido(ultimoCanto == Cantos.ENVIDO
+        && !cantor().getJugador().equipo().equals(jugador.equipo()));
+    acciones.marcarFaltaEnvido(ultimoCanto == Cantos.REAL_ENVIDO
+        && !cantor().getJugador().equipo().equals(jugador.equipo()));
+    acciones.marcarTruco(canto(Cantos.ENVIDO) && !canto(Cantos.TRUCO));
+    acciones.marcarRetruco(ultimoCanto == Cantos.TRUCO
+        && !cantor().getJugador().equipo().equals(jugador.equipo()));
+    acciones.marcarVale4(ultimoCanto == Cantos.RETRUCO
+        && !cantor().getJugador().equipo().equals(jugador.equipo()));
 
-      if (manoJugador.cantoTruco()) {
-        acciones.marcarEnvido(false);
-        acciones.marcarTruco(false);
-      }
-
-      // El quiero lo tiene siempre el otro equipo
-      if (manoJugador.getJugador().id() != manoJugadorActual.getJugador().id()
-          && !manoJugador.getJugador().equipo().equals(manoJugadorActual.getJugador().equipo())) {
-        acciones.marcarQuiero(true);
-        acciones.marcarNoQuiero(true);
-      }
+    // El quiero lo tiene siempre el otro equipo
+    if (cantor() != null
+        && cantor().getJugador().id() != manoJugadorActual.getJugador().id()
+        && !cantor().getJugador().equipo().equals(manoJugadorActual.getJugador().equipo())) {
+      acciones.marcarQuiero(true);
+      acciones.marcarNoQuiero(true);
     }
 
     return acciones;
   }
 
+  public void noQuiero() {
+    cantor().darPuntos(PUNTAJE_BASE);
+    ultimoCanto = null;
+  }
+
+  public void quiero(Jugador jugador) {
+    ManoJugador cantor = cantor();
+    ManoJugador oponente = buscarManoJugador(jugador);
+
+    if (cantor.ganador(oponente, ultimoCanto)) {
+      cantor.darPuntos(ultimoCanto.puntos());
+    } else {
+      oponente.darPuntos(PUNTAJE_BASE);
+    }
+    ultimoCanto = null;
+  }
+
+  public void cantar(Jugador jugador, Cantos canto) {
+    Validate.isTrue(ultimoCanto == null, "Todavia no se respondió un canto");
+
+    ManoJugador manoJugador = buscarManoJugador(jugador);
+    manoJugador.cantar(canto);
+    ultimoCanto = canto;
+  }
+
   private void calcularPuntaje() {
     for (ManoJugador ganador : ganadores()) {
-      if (hayTruco()) {
-        ganador.darPuntos(PUNTAJE_TRUCO);
-      } else {
+      if (ultimoCanto == null) {
         ganador.darPuntos(PUNTAJE_BASE);
+      } else {
+        ganador.darPuntos(ultimoCanto.puntos());
       }
     }
   }
@@ -139,23 +158,23 @@ public class Mano {
     throw new IllegalArgumentException("El jugador no está en esta mano");
   }
 
+  private ManoJugador cantor() {
+    for (ManoJugador manoJugador : manoJugadores) {
+      if (manoJugador.canto(ultimoCanto)) {
+        return manoJugador;
+      }
+    }
+    return null;
+  }
+
   private void proximaBaza() {
     Validate.isTrue(!terminada(), "La mano ya terminó");
     bazas.add(new Baza(manoJugadores.size()));
   }
 
-  private boolean hayTruco() {
+  private boolean canto(Cantos... canto) {
     for (ManoJugador manoJugador : manoJugadores) {
-      if (manoJugador.cantoTruco()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean hayEnvido() {
-    for (ManoJugador manoJugador : manoJugadores) {
-      if (manoJugador.cantoEnvido()) {
+      if (manoJugador.canto(canto)) {
         return true;
       }
     }

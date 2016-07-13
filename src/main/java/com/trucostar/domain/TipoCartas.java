@@ -4,7 +4,7 @@ public enum TipoCartas {
   AS_ESPADA(1, 100),
   AS_BASTO(1, 99),
   SIETE_ESPADAS(7, 98),
-  SIETE_ORO(1, 97),
+  SIETE_ORO(7, 97),
   TRES(3, 96),
   DOS(2, 95),
   AS_FALSO(1, 94),
