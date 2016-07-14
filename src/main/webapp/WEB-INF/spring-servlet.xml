@@ -10,7 +10,7 @@
 
   <context:component-scan base-package="com.trucostar.mvc"/>
 
-  <mvc:annotation-driven />
+  <mvc:annotation-driven  />
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="prefix" value="/WEB-INF/views/"/>
@@ -20,5 +20,5 @@
   <mvc:resources mapping="/static/**" location="/"/>
 
   <mvc:default-servlet-handler />
-  <tx:annotation-driven />
+  <tx:annotation-driven /> 
 </beans>

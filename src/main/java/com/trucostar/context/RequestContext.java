@@ -1,5 +1,7 @@
 package com.trucostar.context;
 
+import org.springframework.security.core.Authentication;
+
 import com.trucostar.domain.Usuario;
 
 public final class RequestContext {
@@ -8,6 +10,14 @@ public final class RequestContext {
   }
 
   public static Usuario usuarioActual() {
-    return new Usuario("jsmith", "jsmith", "pwd");
+    Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext()
+        .getAuthentication();
+    Usuario usuario = null;
+
+    if (authentication != null) {
+      usuario = (Usuario) authentication.getPrincipal();
+    }
+
+    return usuario;
   }
 }
