@@ -1,5 +1,6 @@
 package com.trucostar.mvc;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.trucostar.context.JuegoDetailsService;
     "classpath:/META-INF/spring/spring-servlet.xml"})
 @Transactional
 @Rollback
+@Ignore
 public class SpringServletTest {
 
   @Autowired

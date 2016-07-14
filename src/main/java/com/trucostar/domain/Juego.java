@@ -98,7 +98,7 @@ public class Juego {
 
   public Jugador buscarJugador(Usuario usuario) {
     for (Jugador jugador : jugadores) {
-      if (usuario.getId().equals(jugador.id())) {
+      if (usuario.id().equals(jugador.id())) {
         return jugador;
       }
     }

@@ -10,6 +10,11 @@
     <intercept-url pattern="/**" access="ROLE_JUGADOR" />
   </http>
 
+<!--  <bean id="juegoUserService" class="com.trucostar.context.JuegoDetailsService" />
+  <security:authentication-manager>
+    <security:authentication-provider user-service-ref="juegoUserService" />
+  </security:authentication-manager>
+ --> 
   <authentication-manager>
     <authentication-provider>
       <user-service>
