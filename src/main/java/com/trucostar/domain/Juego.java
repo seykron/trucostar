@@ -75,6 +75,7 @@ public class Juego {
   public void agregarJugador(Jugador jugador) {
     Validate.isTrue(!empezado(),
         "El juego ya empezó, no se pueden agregar jugadores");
+    Validate.isTrue(!jugadores.contains(jugador), "El jugador ya existe");
     jugadores.add(jugador);
 
     if (empezado()) {

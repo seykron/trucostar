@@ -35,14 +35,18 @@ public class JuegoController {
     Validate.notEmpty(grupo, "El nombre del grupo no puede ser null");
 
     Juego juego = juegoDao.buscarPorGrupo(grupo);
+    Jugador jugadorActual;
 
     if (juego == null) {
       juego = juegoFactory.crearJuego(grupo);
-      juegoDao.guardar(juego);
-    }
+      jugadorActual = crearJugador(juego.equipoDisponible());
+      juegoDao.guardarJugador(jugadorActual);
 
-    Jugador jugadorActual = crearJugador(juego.equipoDisponible());
-    juego.agregarJugador(jugadorActual);
+      juego.agregarJugador(jugadorActual);
+      juegoDao.guardar(juego);
+    } else {
+      jugadorActual = juego.buscarJugador(RequestContext.usuarioActual());
+    }
 
     return JuegoDto.crear(juego, jugadorActual);
   }
