@@ -42,6 +42,11 @@ public class JugadorDto {
     return cartasJugadas;
   }
 
+  public static final JugadorDto crear(Jugador jugador) {
+    return new JugadorDto(jugador.id(), jugador.equipo(),
+        new ArrayList<String>(), new ArrayList<String>());
+  }
+
   public static final JugadorDto crear(ManoJugador manoJugador) {
     Validate.notNull(manoJugador, "El jugador no puede ser nulo");
     Jugador jugador = manoJugador.getJugador();

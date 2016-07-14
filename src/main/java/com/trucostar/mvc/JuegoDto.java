@@ -42,12 +42,20 @@ public class JuegoDto {
   public static JuegoDto crear(Juego juego, Jugador jugadorActual) {
     List<JugadorDto> jugadores = new ArrayList<JugadorDto>();
     Mano mano = juego.manoActual();
+    Acciones acciones = null;
 
-    for (ManoJugador jugador : mano.jugadores()) {
-      jugadores.add(JugadorDto.crear(jugador));
+    if (juego.empezado()) {
+      for (ManoJugador jugador : mano.jugadores()) {
+        jugadores.add(JugadorDto.crear(jugador));
+      }
+      acciones = mano.acciones(jugadorActual);
+    } else {
+      for (Jugador jugador : juego.jugadores()) {
+        jugadores.add(JugadorDto.crear(jugador));
+      }
     }
 
     return new JuegoDto(juego.id(), juego.grupo(), jugadores,
-        mano.acciones(jugadorActual));
+        acciones);
   }
 }
